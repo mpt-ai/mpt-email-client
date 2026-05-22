@@ -159,13 +159,11 @@ def create_success_email(site_name, context):
     task_id = ti.task_id
     execution_date = context["dag_run"].logical_date
 
-    # start_dt = getattr(ti, "start_date", None)
-    start_dt = execution_date
-    end_dt = datetime.datetime.now(tz=start_dt.tzinfo) if start_dt else None
+    start_dt = ti.start_date
+    end_dt = ti.end_date or (datetime.datetime.now(tz=start_dt.tzinfo) if start_dt else None)
 
-    # Duration in seconds (best-effort)
-    duration_sec = None
-    if start_dt and end_dt:
+    duration_sec = ti.duration
+    if duration_sec is None and start_dt and end_dt:
         try:
             duration_sec = (end_dt - start_dt).total_seconds()
         except Exception as e:
