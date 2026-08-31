@@ -1,9 +1,7 @@
-import os
-
 def check_type(variable, variableName, dtype, child=None):
-    if type(variable) != dtype:
-        raise Exception(f"Expect {variableName} type {dtype} but got {type(variable)}")
+    if type(variable) is not dtype:
+        raise TypeError(f"Expected {variableName} to be {dtype.__name__} but got {type(variable).__name__}")
     if child is not None:
         for elm in variable:
-            if type(elm) != child:
-                raise Exception(f"{variableName} expect [{child}, {child}, ... {child}] but has {elm}({type(elm)})")
+            if type(elm) is not child:
+                raise TypeError(f"Expected {variableName} to be a list of {child.__name__} but found {elm!r} ({type(elm).__name__})")
